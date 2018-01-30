@@ -18,13 +18,16 @@ framework:
     form: ~
     csrf_protection: ~
     validation: { enable_annotations: true }
-    #serializer: { enable_annotations: true }
+    serializer: { enable_annotations: true }
+    templating:
+        engines: ['twig']
     default_locale: '%locale%'
     trusted_hosts: ~
+    trusted_proxies: ~
     session:
-        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
-        handler_id: session.handler.native_file
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
     fragments: ~
     http_method_override: true
     assets: ~
@@ -58,6 +61,21 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+#Monolog Configuration
+monolog:
+    channels: ["login", "validation"]
+    handlers:
+        login:
+            type: rotating_file
+            path: '%kernel.logs_dir%/%kernel.environment%.login.log'
+            channels: [login]
+            max_files: 30
+        validation:
+            type: rotating_file
+            path: '%kernel.logs_dir%/%kernel.environment%.validation.log'
+            channels: [validation]
+            max_files: 30
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'
@@ -65,3 +83,13 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+fos_rest:
+    format_listener:
+        rules:
+            - { path: ^/, priorities: [ json ], fallback_format: json, prefer_extension: true }
+    view:
+        view_response_listener: 'force'
+    exception:
+        messages:
+            'Symfony\Component\HttpKernel\Exception\HttpException': true
