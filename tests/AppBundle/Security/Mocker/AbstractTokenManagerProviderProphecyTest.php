@@ -2,16 +2,9 @@
 
 namespace Tests\AppBundle\Security\Mocker;
 
-use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\EntityManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Class AbstractTokenManagerProviderTest
- * @package AppBundle\Tests\Security\Mocker
- */
-abstract class AbstractTokenManagerProviderTest extends KernelTestCase
+class AbstractTokenManagerProviderProphecyTest extends KernelTestCase
 {
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
