@@ -58,7 +58,7 @@ abstract class AbstractTokenManagerProviderTest extends KernelTestCase
         $logger
             ->method('error')
             ->withAnyParameters()
-            ->will($this->returnValue(true));
+            ->willReturn($this->returnValue(true));
         $logger
             ->method('info')
             ->withAnyParameters()

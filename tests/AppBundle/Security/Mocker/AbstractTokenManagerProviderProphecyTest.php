@@ -2,61 +2,59 @@
 
 namespace Tests\AppBundle\Security\Mocker;
 
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManager;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\Prophet;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class AbstractTokenManagerProviderProphecyTest extends KernelTestCase
 {
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return ObjectProphecy
      */
     public function getMockEntityManager()
     {
-        return $this
-            ->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->prophesize(EntityManager::class);
     }
 
     /**
      * @param string $repositoryName
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return ObjectProphecy
      */
     public function getMockRepository($repositoryName = null)
     {
-        return $this
-            ->getMockBuilder($repositoryName ? $repositoryName : ObjectRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->prophesize($repositoryName ? $repositoryName : ObjectRepository::class);
     }
 
     /**
      * @param null $name
-     * @return mixed
+     * @return ObjectProphecy|mixed
      */
     public function getMock($name = null)
     {
-        return $this
-            ->getMockBuilder($name)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->prophesize($name);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return ObjectProphecy
      */
     public function getMockLogger()
     {
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
+        /** @var LoggerInterface|ObjectProphecy $logger */
         $logger = $this->getMock(LoggerInterface::class);
+        // Stub
         $logger
-            ->method('error')
-            ->withAnyParameters()
-            ->will($this->returnValue(true));
-        $logger
-            ->method('info')
-            ->withAnyParameters()
-            ->will($this->returnValue(true));
+            ->error(Argument::type('string'), Argument::type('array'))
+            ->willReturn(true);
 
-        return $logger;
+        $logger
+            ->error(Argument::type('string'), Argument::type('array'))
+            ->willReturn(true);
+
+        // On initialise l'objet
+        return $logger->reveal();
     }
 }

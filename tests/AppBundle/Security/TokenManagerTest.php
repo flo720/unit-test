@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use AppBundle\Security\TokenManager;
 use Lcobucci\JWT\Token;
 use Psr\Log\LoggerInterface;
+use Tests\AppBundle\Security\Mocker\AbstractTokenManagerProviderProphecyTest;
 use Tests\AppBundle\Security\Mocker\AbstractTokenManagerProviderTest;
 
 /**
@@ -34,6 +35,8 @@ class TokenManagerTest extends AbstractTokenManagerProviderTest
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->user = (new User())->setId(1)
             ->setPassword('8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918')
             ->setUsername('test');
